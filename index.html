@@ -4,80 +4,100 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="robots" content="noindex">
-<meta name="theme-color" content="#0f1c2e">
+<meta name="theme-color" content="#05070d">
+<link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+<link rel="preload" as="image" href="assets/sky-night-m.webp" media="(max-width: 767px)">
+<link rel="preload" as="image" href="assets/sky-night.webp" media="(min-width: 768px)">
 <title>Расскажите о своём деле</title>
 <style>
 :root {
   color-scheme: dark;
-  --night: #0f1c2e; --ink: #f4f6f9; --muted: #b3c0cf; --line: #41546b; --lift: #1a2b42;
-  --light: #f3c784; --on-light: #1b1a14; --error: #ffb4a8;
-  --display: Georgia, "Noto Serif", "Times New Roman", serif;
-  --text: system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+  --space: #05070d; --text: #f1eee8; --muted: #b2b4b8; --line: rgba(255,255,255,.16); --field: rgba(255,255,255,.38);
+  --gold: #ffc27a; --gold-hover: #ffd7a6; --on-gold: #1e1204; --panel: rgba(5,7,13,.72); --panel-hover: rgba(18,21,30,.82); --danger: #ff9a92;
+  --font: "Segoe UI Variable Display", "Segoe UI", -apple-system, "SF Pro Display", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --ease: cubic-bezier(.2,.7,.2,1);
 }
 *, *::before, *::after { box-sizing: border-box; }
 html { -webkit-text-size-adjust: 100%; height: 100%; }
-body { margin: 0; min-height: 100%; background: var(--night); color: var(--ink); font: 18px/1.5 var(--text); }
-#folds { position: fixed; inset: 0; width: 100%; height: 100%; pointer-events: none; }
-.page { position: relative; min-height: 100vh; min-height: 100dvh; max-width: 640px; margin: 0 auto; display: flex; flex-direction: column;
-  padding: max(16px, env(safe-area-inset-top)) 20px max(20px, env(safe-area-inset-bottom)); }
-.top { display: flex; align-items: center; justify-content: space-between; min-height: 44px; font-size: 15px; color: var(--muted); }
-.brand { font-weight: 700; letter-spacing: .14em; color: var(--ink); }
-.track { height: 2px; background: var(--line); margin-bottom: 8px; overflow: hidden; }
-.track i { display: block; height: 100%; background: var(--light); transform: scaleX(0); transform-origin: left; transition: transform .45s cubic-bezier(.2,.7,.2,1); }
+body { margin: 0; min-height: 100%; background: var(--space); color: var(--text); font: 400 17px/1.5 var(--font); }
+.sky { position: fixed; inset: 0; height: 100lvh; overflow: hidden; background: var(--space); pointer-events: none; transition: opacity .8s ease; }
+.sky picture, .sky img, .sky canvas { position: absolute; inset: 0; width: 100%; height: 100%; display: block; object-fit: cover; }
+.sky .dawn { opacity: var(--dawn, 0); }
+.sky canvas { opacity: 0; transition: opacity 1s ease; }
+.sky.is-live canvas { opacity: 1; }
+.sky.dim { opacity: .28; }
+.page { position: relative; min-height: 100vh; min-height: 100dvh; max-width: 620px; margin: 0 auto; display: flex; flex-direction: column;
+  padding: max(10px, env(safe-area-inset-top)) 20px max(20px, env(safe-area-inset-bottom)); }
+.top { display: flex; align-items: center; justify-content: space-between; min-height: 56px; font-size: 15px; color: var(--muted); }
+.logo { display: inline-flex; align-items: center; gap: 10px; color: var(--text); }
+.logo__mark { flex: none; overflow: visible; fill: none; stroke-linecap: round; }
+.logo__x1 { stroke: currentColor; stroke-width: 3.2; }
+.logo__x2 { stroke: var(--gold); stroke-width: 3.2; }
+.logo__orbit { stroke: var(--gold); stroke-width: 1.2; opacity: .5; }
+.logo__cut { stroke: transparent; stroke-width: 3.8; }
+.logo__front { stroke: var(--gold); stroke-width: 1.45; }
+.logo__sat { fill: var(--gold); stroke: none; }
+.logo__word { font-weight: 600; letter-spacing: .18em; font-size: 15px; }
+.track { height: 2px; background: var(--line); overflow: hidden; }
+.track i { display: block; height: 100%; background: var(--gold); transform: scaleX(0); transform-origin: left; transition: transform .6s var(--ease); }
 form { flex: 1; display: flex; flex-direction: column; margin: 0; }
-.step { border: 0; margin: 0 0 40px; padding: 24px 0 0; min-width: 0; }
+.step { margin: 0 0 40px; padding: 28px 0 0; min-width: 0; }
 .js .step { display: none; margin: 0; }
-.js .step.on { display: block; animation: rise .4s cubic-bezier(.2,.7,.2,1); }
-@keyframes rise { from { transform: translateY(10px); } to { transform: none; } }
-h1, h2 { font-family: var(--display); font-weight: 400; letter-spacing: -.01em; text-wrap: balance; margin: 0 0 12px; outline: none; }
-h1 { font-size: clamp(38px, 10vw, 58px); line-height: 1.06; }
-h2 { font-size: clamp(29px, 7.2vw, 42px); line-height: 1.12; }
-.intro { padding-top: 12vh; }
-.lead { color: var(--muted); margin: 0 0 24px; max-width: 34em; }
-.field { margin-bottom: 20px; }
-.field > label, .field-title { display: block; margin-bottom: 8px; font-weight: 600; }
+.js .step.on { display: block; animation: rise .55s var(--ease); }
+@keyframes rise { from { transform: translateY(14px); } to { transform: none; } }
+h1, h2 { font-weight: 300; letter-spacing: -.03em; text-wrap: balance; margin: 0 0 12px; outline: none; }
+h1 { font-size: clamp(42px, 11vw, 68px); line-height: 1.04; }
+h2 { font-size: clamp(32px, 7.6vw, 48px); line-height: 1.06; }
+.intro { padding-top: 7vh; }
+.lead { color: var(--text); opacity: .86; margin: 0 0 24px; max-width: 32em; text-shadow: 0 1px 12px rgba(5,7,13,.9); }
+.field { margin-bottom: 18px; }
+.field > label { display: block; margin-bottom: 8px; font-weight: 600; font-size: 15px; text-shadow: 0 1px 10px rgba(5,7,13,.95); }
 .opt { color: var(--muted); font-weight: 400; }
-input[type=text], textarea { width: 100%; min-height: 54px; padding: 13px 15px; font: inherit; color: var(--ink); background: rgba(15, 28, 46, .78);
-  border: 1px solid var(--muted); border-radius: 10px; transition: border-color .15s, background-color .15s; }
-textarea { min-height: 136px; resize: vertical; }
+input[type=text], textarea { width: 100%; min-height: 54px; padding: 14px 16px; font: inherit; color: var(--text); background: var(--panel);
+  border: 1px solid var(--field); border-radius: 14px; transition: border-color .15s, box-shadow .15s; }
+textarea { min-height: 124px; resize: vertical; }
 ::placeholder { color: var(--muted); opacity: 1; }
-input[type=text]:focus, textarea:focus { background: var(--lift); border-color: var(--light); }
-:focus-visible { outline: 3px solid var(--light); outline-offset: 2px; }
-[aria-invalid=true] { border-color: var(--error) !important; }
-.err { color: var(--error); font-size: 16px; margin: 8px 0 0; min-height: 0; }
+input[type=text]:focus, textarea:focus { outline: none; border-color: var(--gold); box-shadow: 0 0 0 3px rgba(255,194,122,.14); }
+:focus-visible { outline: 2px solid var(--gold); outline-offset: 3px; }
+[aria-invalid=true] { border-color: var(--danger) !important; }
+.err { color: var(--danger); font-size: 15px; margin: 8px 0 0; text-shadow: 0 1px 10px rgba(5,7,13,.95); }
 .err:empty { display: none; }
 .opts { display: grid; gap: 8px; }
 .opts.wide { grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); }
 .opt-row { position: relative; display: block; cursor: pointer; }
 .opt-row input { position: absolute; inset: 0; width: 100%; height: 100%; margin: 0; opacity: 0; cursor: pointer; }
-.opt-row > span { display: block; min-height: 54px; padding: 13px 15px; background: rgba(15, 28, 46, .78); border: 1px solid var(--line); border-radius: 10px;
-  transition: background-color .15s, color .15s, border-color .15s, transform .15s; }
-.opt-row small { display: block; color: var(--muted); font-size: 16px; line-height: 1.35; margin-top: 2px; }
-.opt-row input:checked + span { background: var(--light); border-color: var(--light); color: var(--on-light); }
-.opt-row input:checked + span small { color: var(--on-light); }
-.opt-row input:focus-visible + span { outline: 3px solid var(--light); outline-offset: 2px; }
-@media (hover: hover) { .opt-row:hover > span { border-color: var(--light); transform: translateY(-2px); } }
-.note { border-left: 2px solid var(--light); padding-left: 12px; margin: 16px 0 0; color: var(--ink); font-size: 16px; }
+.opt-row > span { display: block; min-height: 54px; padding: 14px 16px; background: var(--panel); border: 1px solid var(--line); border-radius: 14px;
+  transition: background-color .2s, color .2s, border-color .2s, transform .2s, box-shadow .25s; }
+.opt-row small { display: block; color: var(--muted); font-size: 15px; line-height: 1.35; margin-top: 2px; }
+.opt-row input:checked + span { background: var(--gold); border-color: var(--gold); color: var(--on-gold); box-shadow: 0 14px 34px -12px rgba(255,194,122,.5); }
+.opt-row input:checked + span small { color: var(--on-gold); }
+.opt-row input:focus-visible + span { outline: 2px solid var(--gold); outline-offset: 3px; }
+@media (hover: hover) { .opt-row:hover > span { background: var(--panel-hover); border-color: var(--gold); transform: translateY(-2px); }
+  .opt-row:hover input:checked + span { background: var(--gold-hover); } }
+.note { border-left: 2px solid var(--gold); background: var(--panel); padding: 10px 12px; border-radius: 0 10px 10px 0; margin: 16px 0 0; font-size: 15px; }
 [hidden] { display: none !important; }
 .nav { display: none; gap: 8px; margin-top: auto; padding-top: 24px; position: sticky; bottom: 0; }
 .js .nav { display: flex; }
-button { font: inherit; font-weight: 600; min-height: 54px; padding: 12px 22px; border-radius: 10px; border: 1px solid var(--line); background: var(--night); color: var(--ink); cursor: pointer; touch-action: manipulation; transition: transform .15s; }
-button.go { flex: 1; background: var(--light); border-color: var(--light); color: var(--on-light); }
-@media (hover: hover) { button:hover { transform: translateY(-2px); } }
+button { font: inherit; font-weight: 600; min-height: 54px; padding: 12px 22px; border-radius: 14px; border: 1px solid rgba(255,255,255,.34); background: rgba(5,7,13,.6); color: var(--text); cursor: pointer; touch-action: manipulation;
+  transition: background-color .2s, border-color .2s, box-shadow .25s, transform .2s; }
+button.go { flex: 1; background: var(--gold); border-color: var(--gold); color: var(--on-gold); }
+@media (hover: hover) { button:hover { transform: translateY(-2px); border-color: var(--text); }
+  button.go:hover { background: var(--gold-hover); border-color: var(--gold-hover); box-shadow: 0 14px 34px -12px rgba(255,194,122,.5); } }
+button:active { transform: none; }
 .sum { margin: 0 0 20px; }
 .sum div { display: grid; grid-template-columns: 1fr auto; gap: 0 12px; padding: 12px 0; border-bottom: 1px solid var(--line); }
-.sum dt { color: var(--muted); font-size: 16px; grid-column: 1; }
+.sum dt { color: var(--muted); font-size: 15px; grid-column: 1; }
 .sum dd { margin: 0; grid-column: 1; overflow-wrap: anywhere; white-space: pre-line; }
-.sum button { grid-column: 2; grid-row: 1 / 3; align-self: center; min-height: 44px; padding: 0 4px; border: 0; background: none; color: var(--light); font-weight: 400; text-decoration: underline; }
+.sum button { grid-column: 2; grid-row: 1 / 3; align-self: center; min-height: 44px; padding: 0 4px; border: 0; background: none; color: var(--gold); font-weight: 400; text-decoration: underline; text-underline-offset: 3px; }
 .send { display: grid; gap: 8px; }
 .send-more { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
-.status { min-height: 28px; font-weight: 600; margin: 12px 0 0; }
-.small { color: var(--muted); font-size: 16px; }
-.quiet { min-height: 44px; border: 0; background: none; color: var(--muted); padding: 0; font-weight: 400; text-decoration: underline; }
+.status { min-height: 26px; font-weight: 600; margin: 12px 0 0; color: var(--gold); }
+.small { color: var(--muted); font-size: 15px; }
+.quiet { min-height: 44px; border: 0; background: none; color: var(--muted); padding: 0; font-weight: 400; text-decoration: underline; text-underline-offset: 3px; }
 @media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation: none !important; transition: none !important; } }
 @media print {
   :root { color-scheme: light; }
-  #folds, .nav, .top, .track, .send, .quiet, .status { display: none !important; }
+  .sky, .nav, .top, .track, .send, .quiet, .status { display: none !important; }
   body { background: #fff; color: #000; font-size: 12pt; }
   .js .step { display: none; } .js .step.final { display: block; }
   .sum button { display: none; } .sum dt { color: #333; }
@@ -85,10 +105,13 @@ button.go { flex: 1; background: var(--light); border-color: var(--light); color
 </style>
 </head>
 <body>
-<canvas id="folds" aria-hidden="true"></canvas>
+<div class="sky" id="sky" aria-hidden="true">
+  <picture><source media="(max-width: 767px)" srcset="assets/sky-night-m.webp"><img src="assets/sky-night.webp" alt="" fetchpriority="high"></picture>
+  <img class="dawn" id="dawn" alt="" hidden>
+</div>
 <div class="page">
   <div class="top">
-    <span class="brand">XLMNR</span>
+    <span class="logo"><svg class="logo__mark" viewBox="0 0 32 32" width="30" height="30" aria-hidden="true"><ellipse class="logo__orbit" cx="16" cy="16" rx="14" ry="6.2" transform="rotate(-28 16 16)" pathLength="1"/><path class="logo__x1" d="M9 9l14 14" pathLength="1"/><path class="logo__x2" d="M23 9l-5 5M14 18l-5 5" pathLength="1"/><path class="logo__cut" d="M3.64 22.57A14 6.2 -28 0 0 28.6 11.8" pathLength="1"/><path class="logo__front" d="M3.64 22.57A14 6.2 -28 0 0 28.6 11.8" pathLength="1"/><circle class="logo__sat" cx="28.6" cy="11.8" r="1.7"/></svg><span class="logo__word">XLMNR</span></span>
     <span id="counter" aria-live="polite"></span>
   </div>
   <div class="track" aria-hidden="true"><i id="bar"></i></div>
@@ -263,48 +286,92 @@ button.go { flex: 1; background: var(--light); border-color: var(--light); color
     return Array.prototype.map.call(form.querySelectorAll('input[name="' + name + '"]:checked'), function (i) { return i.value; });
   }
 
-  // Складки: одни и те же линии, на каждом шаге чуть смещается фаза
-  var canvas = el('folds');
-  var ctx = canvas.getContext('2d');
-  var phase = 0, target = 0, raf = 0;
+  // Живая Земля с сайта: каждый ответ ведёт камеру с ночной орбиты к рассвету.
+  // Постер виден сразу. Живая картинка включается, только если устройство тянет.
+  var sky = el('sky');
+  var earth = null, canvas = null, skyTarget = 0, skySmooth = 0, scale = 1, raf = 0, frameAt = 0, clock = 3, seen = 0, samples = [], typing = false;
 
-  function draw() {
-    var ratio = Math.min(window.devicePixelRatio || 1, 1.5);
-    var w = window.innerWidth, h = window.innerHeight;
-    if (canvas.width !== Math.round(w * ratio) || canvas.height !== Math.round(h * ratio)) {
-      canvas.width = Math.round(w * ratio);
-      canvas.height = Math.round(h * ratio);
-    }
-    ctx.setTransform(ratio, 0, 0, ratio, 0, 0);
-    ctx.clearRect(0, 0, w, h);
-    var lines = 30;
-    for (var n = 0; n < lines; n++) {
-      var t = n / lines;
-      var lit = n === 8 + Math.round(phase * 2) % 16;
-      ctx.beginPath();
-      for (var x = -10; x <= w + 10; x += 14) {
-        var u = x / Math.max(w, 700);
-        var y = h * (0.72 + t * 0.42)
-          + Math.sin(u * 5 + phase * 0.8 + t * 5) * 14
-          + Math.sin(u * 2.2 - phase * 0.5 + t * 9) * 42 * (0.4 + t);
-        if (x === -10) ctx.moveTo(x, y); else ctx.lineTo(x, y);
-      }
-      ctx.strokeStyle = lit ? 'rgba(243,199,132,.5)' : 'rgba(179,192,207,' + (0.08 + t * 0.1) + ')';
-      ctx.lineWidth = lit ? 1.4 : 1;
-      ctx.stroke();
+  function canRunLive() {
+    var q = new URLSearchParams(location.search).get('3d');
+    if (q === '0') return false;
+    if (q === '1') return true;
+    var c = navigator.connection || {};
+    if (calm || c.saveData || /2g/.test(c.effectiveType || '')) return false;
+    if ((navigator.hardwareConcurrency || 4) < 6 && window.innerWidth < 768) return false;
+    if ((navigator.hardwareConcurrency || 4) < 4 || (navigator.deviceMemory || 4) <= 2) return false;
+    return true;
+  }
+
+  function fit() {
+    if (!earth) return;
+    var ratio = Math.min(window.devicePixelRatio || 1, 1.5) * scale;
+    var w = sky.clientWidth, h = sky.clientHeight;
+    var pixels = window.innerWidth < 768 ? 0.9e6 : 1.9e6;
+    var k = Math.min(1, Math.sqrt(pixels / (w * h * ratio * ratio)));
+    earth.resize(w * ratio * k, h * ratio * k);
+    earth.draw(skySmooth, clock);
+  }
+
+  function stopLive() {
+    cancelAnimationFrame(raf);
+    raf = 0;
+    sky.classList.remove('is-live');
+    var gone = earth, node = canvas;
+    earth = null;
+    setTimeout(function () { node.remove(); gone.destroy(); }, 1200);
+  }
+
+  function frame(now) {
+    raf = requestAnimationFrame(frame);
+    if (!frameAt) frameAt = now - 34;
+    var dt = (now - frameAt) / 1000;
+    if (dt < 0.03) return;
+    frameAt = now;
+    clock += Math.min(dt, 0.1);
+    skySmooth += (skyTarget - skySmooth) * Math.min(1, dt * 1.8);
+    earth.draw(skySmooth, clock);
+    sky.classList.add('is-live');
+    // Сторож смотрит на медиану: сначала снижает разрешение, потом возвращает постер
+    if (++seen > 15 && dt < 0.5) samples.push(dt);
+    if (samples.length === 40) {
+      var median = samples.sort(function (a, b) { return a - b; })[20];
+      samples = [];
+      if (median > 0.05) { if (scale > 0.55) { scale *= 0.75; fit(); } else stopLive(); }
     }
   }
 
-  function flow() {
-    cancelAnimationFrame(raf);
-    if (calm) { phase = target; draw(); return; }
-    var from = phase, begun = performance.now();
-    (function tick(now) {
-      var k = Math.min((now - begun) / 900, 1);
-      phase = from + (target - from) * (1 - Math.pow(1 - k, 3));
-      draw();
-      if (k < 1) raf = requestAnimationFrame(tick);
-    }(begun));
+  function syncLive() {
+    var run = earth && !document.hidden && !typing;
+    if (run && !raf) { frameAt = 0; seen = 0; samples = []; raf = requestAnimationFrame(frame); }
+    if (!run && raf) { cancelAnimationFrame(raf); raf = 0; }
+  }
+
+  function startLive() {
+    var image = new Image();
+    image.onload = function () {
+      import('./assets/earth.js').then(function (mod) {
+        canvas = document.createElement('canvas');
+        earth = mod.createEarth(canvas, image);
+        if (!earth) return;
+        sky.appendChild(canvas);
+        fit();
+        new ResizeObserver(fit).observe(sky);
+        document.addEventListener('visibilitychange', syncLive);
+        syncLive();
+      }).catch(function (e) { console.warn('[земля]', e); });
+    };
+    image.src = 'assets/earth-lights.webp';
+  }
+
+  function setSky(index) {
+    skyTarget = index / last * 0.46;
+    sky.style.setProperty('--dawn', Math.min(1, Math.max(0, (skyTarget - 0.12) / 0.3)).toFixed(3));
+    sky.classList.toggle('dim', index === last);
+    var dawn = el('dawn');
+    if (index > 0 && dawn.hidden) {
+      dawn.src = window.innerWidth < 768 ? 'assets/sky-dawn-m.webp' : 'assets/sky-dawn.webp';
+      dawn.hidden = false;
+    }
   }
 
   function show(index, keepFocus) {
@@ -317,11 +384,9 @@ button.go { flex: 1; background: var(--light); border-color: var(--light); color
     el('next').textContent = index === 0 ? 'Начать' : index === last - 1 ? 'К проверке' : 'Дальше';
     document.querySelector('.nav').hidden = index === last;
     if (index === last) renderSummary();
-    canvas.hidden = index === last;
     window.scrollTo(0, 0);
     if (!keepFocus) steps[index].querySelector('h1, h2').focus({ preventScroll: true });
-    target = index;
-    flow();
+    setSky(index);
     saveState();
   }
 
@@ -490,12 +555,17 @@ button.go { flex: 1; background: var(--light); border-color: var(--light); color
     }
   });
   form.addEventListener('submit', function (e) { e.preventDefault(); });
-  window.addEventListener('resize', draw, { passive: true });
-
   var start = loadState();
   updateMaxNote();
-  phase = start;
+  skySmooth = start / last * 0.46;
   show(start, true);
+  // На телефоне клавиатура занимает экран: пока человек печатает, Земля отдыхает
+  form.addEventListener('focusin', function (e) { typing = window.innerWidth < 768 && e.target.matches('input[type=text], textarea'); syncLive(); });
+  form.addEventListener('focusout', function () { typing = false; syncLive(); });
+  if (canRunLive()) {
+    var go = function () { window.setTimeout(startLive, 300); };
+    if (document.readyState === 'complete') go(); else window.addEventListener('load', go, { once: true });
+  }
 }());
 </script>
 </body>
