@@ -13,7 +13,7 @@
 :root {
   color-scheme: dark;
   --space: #05070d; --text: #f1eee8; --muted: #b2b4b8; --line: rgba(255,255,255,.16); --field: rgba(255,255,255,.38);
-  --gold: #ffc27a; --gold-hover: #ffd7a6; --on-gold: #1e1204; --panel: rgba(5,7,13,.72); --panel-hover: rgba(18,21,30,.82); --danger: #ff9a92;
+  --gold: #ffc27a; --gold-hover: #ffd7a6; --on-gold: #1e1204; --panel: rgba(5,7,13,.84); --panel-hover: rgba(18,21,30,.9); --danger: #ff9a92;
   --font: "Segoe UI Variable Display", "Segoe UI", -apple-system, "SF Pro Display", Roboto, "Helvetica Neue", Arial, sans-serif;
   --ease: cubic-bezier(.2,.7,.2,1);
 }
@@ -25,8 +25,9 @@ body { margin: 0; min-height: 100%; background: var(--space); color: var(--text)
 .sky .dawn { opacity: var(--dawn, 0); }
 .sky canvas { opacity: 0; transition: opacity 1s ease; }
 .sky.is-live canvas { opacity: 1; }
+.sky.soft { opacity: .5; }
 .sky.dim { opacity: .28; }
-.page { position: relative; min-height: 100vh; min-height: 100dvh; max-width: 620px; margin: 0 auto; display: flex; flex-direction: column;
+.page { position: relative; min-height: 100vh; min-height: 100dvh; max-width: 760px; margin: 0 auto; display: flex; flex-direction: column;
   padding: max(10px, env(safe-area-inset-top)) 20px max(20px, env(safe-area-inset-bottom)); }
 .top { display: flex; align-items: center; justify-content: space-between; min-height: 56px; font-size: 15px; color: var(--muted); }
 .logo { display: inline-flex; align-items: center; gap: 10px; color: var(--text); }
@@ -55,7 +56,7 @@ h2 { font-size: clamp(32px, 7.6vw, 48px); line-height: 1.06; }
 .opt { color: var(--muted); font-weight: 400; }
 input[type=text], textarea { width: 100%; min-height: 54px; padding: 14px 16px; font: inherit; color: var(--text); background: var(--panel);
   border: 1px solid var(--field); border-radius: 14px; transition: border-color .15s, box-shadow .15s; }
-textarea { min-height: 124px; resize: vertical; }
+textarea { display: block; min-height: 150px; resize: vertical; }
 ::placeholder { color: var(--muted); opacity: 1; }
 input[type=text]:focus, textarea:focus { outline: none; border-color: var(--gold); box-shadow: 0 0 0 3px rgba(255,194,122,.14); }
 :focus-visible { outline: 2px solid var(--gold); outline-offset: 3px; }
@@ -84,20 +85,47 @@ button.go { flex: 1; background: var(--gold); border-color: var(--gold); color: 
 @media (hover: hover) { button:hover { transform: translateY(-2px); border-color: var(--text); }
   button.go:hover { background: var(--gold-hover); border-color: var(--gold-hover); box-shadow: 0 14px 34px -12px rgba(255,194,122,.5); } }
 button:active { transform: none; }
-.sum { margin: 0 0 20px; }
+.how { list-style: none; counter-reset: how; margin: 0 0 20px; padding: 0; display: grid; gap: 10px; }
+.how li { counter-increment: how; display: grid; grid-template-columns: 34px 1fr; gap: 12px; align-items: center; font-size: 18px; }
+.how li::before { content: counter(how); width: 34px; height: 34px; border-radius: 50%; display: grid; place-items: center; background: var(--gold); color: var(--on-gold); font-weight: 600; font-size: 16px; }
+.big { width: 100%; }
+.answers { margin-top: 28px; padding: 18px 20px; background: var(--panel); border: 1px solid var(--line); border-radius: 16px; }
+.answers h3 { margin: 0 0 6px; font-size: 20px; font-weight: 600; }
+.sum { margin: 0; }
+.sum div:last-child { border-bottom: 0; }
 .sum div { display: grid; grid-template-columns: 1fr auto; gap: 0 12px; padding: 12px 0; border-bottom: 1px solid var(--line); }
 .sum dt { color: var(--muted); font-size: 15px; grid-column: 1; }
 .sum dd { margin: 0; grid-column: 1; overflow-wrap: anywhere; white-space: pre-line; }
 .sum button { grid-column: 2; grid-row: 1 / 3; align-self: center; min-height: 44px; padding: 0 4px; border: 0; background: none; color: var(--gold); font-weight: 400; text-decoration: underline; text-underline-offset: 3px; }
-.send { display: grid; gap: 8px; }
-.send-more { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+.more { display: flex; flex-wrap: wrap; gap: 8px 20px; margin-top: 16px; }
+.ask { margin-top: 12px; padding: 14px 16px; background: var(--panel); border: 1px solid var(--line); border-radius: 14px; }
+.ask p { margin: 0 0 10px; font-weight: 600; }
+.ask-row { display: flex; gap: 8px; }
+.ask-row button { flex: 1; min-height: 48px; padding: 8px 14px; }
 .status { min-height: 26px; font-weight: 600; margin: 12px 0 0; color: var(--gold); }
 .small { color: var(--muted); font-size: 15px; }
-.quiet { min-height: 44px; border: 0; background: none; color: var(--muted); padding: 0; font-weight: 400; text-decoration: underline; text-underline-offset: 3px; }
+.quiet { color: var(--muted); min-height: 44px; border: 0; background: none; color: var(--muted); padding: 0; font-weight: 400; text-decoration: underline; text-underline-offset: 3px; }
+@media (min-width: 768px) {
+  body { font-size: 19px; }
+  h1 { font-size: 76px; }
+  h2 { font-size: 54px; }
+  .step { padding-top: 40px; }
+  .lead { font-size: 21px; margin-bottom: 30px; }
+  .field { margin-bottom: 24px; }
+  .field > label { font-size: 18px; margin-bottom: 10px; }
+  input[type=text], textarea { min-height: 72px; padding: 20px 22px; font-size: 21px; border-radius: 16px; }
+  textarea { min-height: 240px; }
+  .opts { gap: 10px; }
+  .opt-row > span { min-height: 68px; padding: 19px 22px; border-radius: 16px; font-size: 20px; }
+  .opt-row small { font-size: 16px; }
+  button { min-height: 64px; font-size: 19px; border-radius: 16px; }
+  .quiet { min-height: 44px; font-size: 16px; }
+}
 @media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation: none !important; transition: none !important; } }
 @media print {
   :root { color-scheme: light; }
-  .sky, .nav, .top, .track, .send, .quiet, .status { display: none !important; }
+  .sky, .nav, .top, .track, .how, .big, .more, .ask, .status { display: none !important; }
+  .answers { border: 0; padding: 0; background: none; }
   body { background: #fff; color: #000; font-size: 12pt; }
   .js .step { display: none; } .js .step.final { display: block; }
   .sum button { display: none; } .sum dt { color: #333; }
@@ -238,18 +266,30 @@ button:active { transform: none; }
     </section>
 
     <section class="step final" data-name="final">
-      <h2 tabindex="-1">Готово. Проверьте и отправьте</h2>
-      <dl class="sum" id="summary"></dl>
-      <div class="send">
-        <button type="button" class="go" id="send">Отправить ответы</button>
-        <div class="send-more">
-          <button type="button" id="copy">Скопировать</button>
-          <button type="button" id="save">Скачать файлом</button>
+      <h2 tabindex="-1">Готово. Осталось отправить</h2>
+      <ol class="how">
+        <li>Нажмите кнопку ниже, ответы скопируются.</li>
+        <li>Вставьте их в переписку с Макаром и отправьте.</li>
+      </ol>
+      <button type="button" class="go big" id="copy">Скопировать ответы</button>
+      <p class="status" id="status" role="status"></p>
+      <div class="answers">
+        <h3>Ваши ответы</h3>
+        <dl class="sum" id="summary"></dl>
+      </div>
+      <div class="more">
+        <button type="button" class="quiet" id="share" hidden>Поделиться</button>
+        <button type="button" class="quiet" id="save">Скачать файлом</button>
+        <button type="button" class="quiet" id="restart">Начать сначала</button>
+      </div>
+      <div class="ask" id="resetAsk" hidden>
+        <p>Удалить все ответы?</p>
+        <div class="ask-row">
+          <button type="button" id="resetYes">Да, удалить</button>
+          <button type="button" id="resetNo">Оставить</button>
         </div>
       </div>
-      <p class="status" id="status" role="status"></p>
-      <p class="small">Отправьте ответы тому, кто дал вам ссылку. Пока вы их не отправите, они остаются только у вас. Пароли и ключи сюда писать не нужно.</p>
-      <button type="button" class="quiet" id="reset">Начать сначала</button>
+      <p class="small">Ответы остаются только у вас, пока вы их не отправите. Пароли и ключи сюда писать не нужно.</p>
     </section>
 
     <div class="nav">
@@ -367,6 +407,7 @@ button:active { transform: none; }
     skyTarget = index / last * 0.46;
     sky.style.setProperty('--dawn', Math.min(1, Math.max(0, (skyTarget - 0.12) / 0.3)).toFixed(3));
     sky.classList.toggle('dim', index === last);
+    sky.classList.toggle('soft', !!steps[index].querySelector('.field'));
     var dawn = el('dawn');
     if (index > 0 && dawn.hidden) {
       dawn.src = window.innerWidth < 768 ? 'assets/sky-dawn-m.webp' : 'assets/sky-dawn.webp';
@@ -498,21 +539,22 @@ button:active { transform: none; }
       var ok = false;
       try { ok = document.execCommand('copy'); } catch (e) { ok = false; }
       area.remove();
-      say(ok ? 'Скопировано. Вставьте в сообщение и отправьте.' : 'Не удалось скопировать, скачайте файл.');
+      say(ok ? 'Скопировано. Теперь вставьте ответы в переписку с Макаром.' : 'Не удалось скопировать, скачайте файл.');
     };
     if (navigator.clipboard && navigator.clipboard.writeText) {
-      navigator.clipboard.writeText(text).then(function () { say('Скопировано. Вставьте в сообщение и отправьте.'); }, fallback);
+      navigator.clipboard.writeText(text).then(function () { say('Скопировано. Теперь вставьте ответы в переписку с Макаром.'); }, fallback);
     } else fallback();
   }
 
   el('next').addEventListener('click', function () { if (validate(current)) show(current + 1); });
   el('back').addEventListener('click', function () { show(current - 1); });
   el('copy').addEventListener('click', copyText);
-  el('send').addEventListener('click', function () {
-    if (navigator.share) {
+  if (navigator.share && window.innerWidth < 768) {
+    el('share').hidden = false;
+    el('share').addEventListener('click', function () {
       navigator.share({ title: 'Анкета для сайта', text: toText() }).catch(function (e) { if (e.name !== 'AbortError') copyText(); });
-    } else copyText();
-  });
+    });
+  }
   el('save').addEventListener('click', function () {
     var url = URL.createObjectURL(new Blob([toText()], { type: 'text/plain;charset=utf-8' }));
     var a = document.createElement('a');
@@ -522,12 +564,22 @@ button:active { transform: none; }
     a.click();
     a.remove();
     URL.revokeObjectURL(url);
-    say('Файл скачан. Отправьте его тому, кто дал вам ссылку.');
+    say('Файл скачан. Отправьте его Макару.');
   });
-  el('reset').addEventListener('click', function () {
-    if (!window.confirm('Удалить ответы и начать сначала?')) return;
+  el('restart').addEventListener('click', function () {
+    el('resetAsk').hidden = false;
+    el('resetYes').focus();
+  });
+  el('resetNo').addEventListener('click', function () {
+    el('resetAsk').hidden = true;
+    el('restart').focus();
+  });
+  el('resetYes').addEventListener('click', function () {
     form.reset();
     store('del');
+    el('resetAsk').hidden = true;
+    Array.prototype.forEach.call(form.querySelectorAll('[aria-invalid]'), clearError);
+    Array.prototype.forEach.call(form.querySelectorAll('.err'), function (box) { box.textContent = ''; });
     say('');
     updateMaxNote();
     show(0);
@@ -546,7 +598,7 @@ button:active { transform: none; }
     window.setTimeout(function () {
       if (!steps[current].contains(e.target) || !el('maxNote').hidden) return;
       show(current + 1);
-    }, calm ? 0 : 220);
+    }, calm ? 0 : 300);
   });
   form.addEventListener('keydown', function (e) {
     if (e.key === 'Enter' && e.target.tagName === 'INPUT' && e.target.type === 'text') {
